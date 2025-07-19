@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aitiustus</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .parallax-bg {
+            position: relative;
+            height: 100vh;
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center;
+            transform-style: preserve-3d;
+            perspective: 100px;
+        }
+
+        /* Add this new CSS rule */
+        .parallax-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0 auto;
+        }
+
+        /* Remove or modify this existing CSS rule */
+        .slide-container {
+            position: relative; /* Remove absolute positioning */
+            width: 75%;
+            max-width: 800px; /* Add a maximum width if desired */
+            flex: 1;
+            align-items: center;
+            bottom: 150px;
+        }
+
+        .slideshow {
+            position: absolute;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .slide-indicators {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator.active {
+            background-color: white;
+            transform: scale(1.2);
+        }
+
+        .content-container {
+            position: relative;
+            z-index: 2;
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .paypal-container {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .top-left-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-family: Tahoma;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="parallax-bg">
+        <div class="parallax-content">
+            <div class="slide-container">
+                <div class="slideshow" id="slideshow">
+                    <!-- Paste your 8 images here -->
+                    <img src="7SMDWzHANre8jb2PvVM1gAyWJ7YRNd467MzCBTi0.jpg" class="slide active" alt="Slide 1">
+                    <img src="j2eMva9cYa1LtIB7v2RKy6xUdxg1hWuFK1sBIwXE.jpg" class="slide" alt="Slide 2">
+                    <img src="JUKkxCnQplVWmVpljPjq82oPk9df76xlpSH4vv0q.jpg" class="slide" alt="Slide 3">
+                    <img src="OZP9wNKbAvnL6bLJUx3TpvqNuM0ca4HDjOC8XR8X.jpg" class="slide" alt="Slide 4">
+                    <img src="paZWtG8F1DxpGb2ZgOhO0NqJX6UH15H6PAxP4Fpe.jpg" class="slide" alt="Slide 5">
+                    <img src="SbEZriyctzylOj3d86jXDsKYA71NEPKSmteYB9VX.jpg" class="slide" alt="Slide 6">
+                    <img src="SbEZriyctzylOj3d86jXDsKYA71NEPKSmteYB9VX.jpg" class="slide" alt="Slide 7">
+                    <img src="UE8p6PmP1lKUETZ3XbKTxbq0bg1nAHx52kMIGYnB.jpg" class="slide" alt="Slide 8">
+                </div>
+                <div class="slide-indicators" id="indicators"></div>
+            </div>
+
+            <div class="content-container">
+                <!-- Paste your PayPal payment script here -->
+                <!--<h2>Make a Payment</h2>
+                <p>Please scroll down to see more images and make a payment.</p>-->
+                <div class="paypal-container" id="paypal-button"></div>
+            </div>
+        </div>
+    </div>
+    <a href="index.html" class="top-left-link">Aitiustus</a>
+    <!--<a href="https://Aitiustus.com" class="top-left-link">Aitiustus</a>-->
+
+    <script>
+        // Slideshow functionality
+        const slideshow = document.getElementById('slideshow');
+        const indicatorsContainer = document.getElementById('indicators');
+        let currentSlide = 0;
+
+        // Get all slides
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        // Create indicators
+        for (let i = 0; i < totalSlides; i++) {
+            const indicator = document.createElement('div');
+            indicator.className = 'indicator';
+            if (i === 0) {
+                indicator.classList.add('active');
+            }
+            indicator.addEventListener('click', () => goToSlide(i));
+            indicatorsContainer.appendChild(indicator);
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide].classList.add('active');
+            document.querySelectorAll('.indicator').forEach((ind, i) => ind.classList.toggle('active', i === currentSlide));
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            goToSlide(currentSlide);
+        }
+
+        // Start automatic slideshow
+        setInterval(nextSlide, 5000);
+
+        // Parallax effect
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            document.querySelector('.parallax-bg').style.transform = `translateY(${scrolled * 0.2}px)`;
+        });
+
+        // PayPal button placeholder (replace with actual code)
+        const paypalButton = document.getElementById('paypal-button');
+        paypalButton.innerHTML = `
+            <!--<h3>Scroll Down to Continue</h3>-->
+            <!-- Add your PayPal payment button or form here -->
+        `;
+    </script>
+</body>
+</html>
